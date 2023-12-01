@@ -3,7 +3,6 @@
 
 int main()
 {
-    // Open and read the file
     char *filepath = "..\\input.txt";
     FILE *input_file = fopen(filepath, "r");
     char input_line[128];

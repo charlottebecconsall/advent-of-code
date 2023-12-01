@@ -34,6 +34,7 @@ def get_calibration_value(word:str):
                 calibration_value += (value * 10)
             last_digit = value
     calibration_value += last_digit
+    print(calibration_value)
     return calibration_value
     
 

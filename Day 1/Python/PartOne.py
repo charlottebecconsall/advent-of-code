@@ -1,3 +1,6 @@
+"""
+Getting the first and last digit in a string
+"""
 
 def get_calibration_value(word:str):
     calibration_value = 0

@@ -33,7 +33,6 @@ int get_part_number(int start_index, char *input_line, char *line_before, char *
         number += input_line[end_index] - '0';
     }
     end_index--;
-    // printf("\nFull number found: %d", number);
     
     // Check all surrounding symbols
     int is_part = 0;
@@ -73,19 +72,11 @@ int main(void)
     strcpy(line_before, input_line);
     while (fgets(input_line, 156, input_file_ptr_1) != NULL) {
         fgets(line_after, 156, input_file_ptr_2);    //ptr_2 is one ahead of ptr_1
-        // printf("\nLine Before: %s", line_before);
-        // printf("\nInput Line: %s", input_line);
-        // printf("\nLine After: %s", line_after);
-        // Do the actual calculating stuff
         int part_number = 0;
         for (int i=0; input_line[i] != '\0'; i++) {
             if (isdigit(input_line[i]) && (!isdigit(input_line[i-1]))) {
                 part_number = get_part_number(i, input_line, line_before, line_after);
                 sum += part_number;
-                if(part_number > 0) {
-                    printf("%d,", part_number);
-                }
-
             }
             
         }
@@ -94,7 +85,6 @@ int main(void)
         printf("\n");
         
     }
-    // there's a potential bug where it will struggle with the very last line.
     fclose(input_file_ptr_1);
     fclose(input_file_ptr_2);
 

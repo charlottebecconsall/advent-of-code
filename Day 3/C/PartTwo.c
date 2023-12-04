@@ -6,7 +6,18 @@ Find the sum of all products of numbers which are adjacent (including diagonally
 #include <string.h>
 #include <ctype.h>
 
-// Checks if character is a valid symbol
+
+struct gear_number 
+{
+    int number;
+    int start_index;
+    int end_index;
+};
+
+
+/*
+Checks if character is a valid symbol
+*/
 int is_symbol(char character)
 {
     int symbol = 0;
@@ -19,17 +30,31 @@ int is_symbol(char character)
     return symbol;
 }
 
-// Gets full number
-int get_full_number(int start_index, char *input_line)
+/* 
+Gets full number, given an index which lies somewhere in that number
+Returns: full number found, start index of number in line provided, end index of number in line provided
+*/
+struct gear_number get_full_number(int index, char *input_line)
 {
-    // Get full number and index of end of number
     int number = 0;
-    for (start_index; (isdigit(input_line[start_index])); start_index++) {
+    int start_index = 0;
+    if (index != 0) {
+        // Find the start index of the number
+        for (int i=0; isdigit(input_line[index-i]); i++) {
+            if ((index-i) == 0) {start_index = 0;}
+            else if (!isdigit(input_line[index-(i+1)])) {start_index = index - i;}
+        }
+    } else {start_index = index;}
+
+    // Get full number from the start index
+    int end_index = start_index;
+    for (end_index; (isdigit(input_line[end_index])); end_index++) {
         number *= 10;
-        number += input_line[start_index] - '0';
+        number += input_line[end_index] - '0';
     }
     
-    return number;
+    struct gear_number gear_information = {number, start_index, end_index};
+    return gear_information;
 }
 
 /* 
@@ -38,30 +63,26 @@ Returns: gear ratio if it is valid, 0 if part number not valid
 */
 int get_gear_ratio(int asterisk_index, char *input_line, char *line_before, char *line_after)
  {
-    // Check all surrounding areas for a number
-    // If a number is found, record the index of that number and what line the number is on (working on this)
-    // Find the full number
-    // If more than two full numbers have been found, set the return value to zero
-    // Get product of those two numbers and return it
     int gear_ratio = 1;
-
-    // Check all surrounding spaces
-    int first_number_index = -1;
-    char *first_number_line[156];
-    int second_number_index = -1;
-    char *second_number_line[156];
-    for (int i=(asterisk_index-1); i <= (asterisk_index+1); i++) {
-        if (i < 0) {
-            continue;
-        }
-        if (isdigit(line_before[i]) || isdigit(input_line[i]) || isdigit(line_after[i])) {
-            if (first_number_index == -1) {
-                if (second_number_index == -1) {gear_ratio = 0;}
-                else {second_number_index = i;} // TODO assign second number line to the right line
+    int counter = 0;
+    char *lines[3] = {line_before, input_line, line_after};
+    struct gear_number gear_information;
+    for (int line_num=0; line_num < 3; line_num++) {
+        char *line = lines[line_num];
+        for (int i=(asterisk_index-1); i <= (asterisk_index+1); i++) {
+            if (i < 0) {continue;}
+            if (isdigit(line[i])) {
+                gear_information = get_full_number(i, line);
+                gear_ratio *= gear_information.number;
+                counter++;
+                i = gear_information.end_index;
             }
         }
     }
-    
+
+    if (counter != 2) {
+        gear_ratio = 0;
+    }
     
     return gear_ratio;
  }
@@ -90,12 +111,10 @@ int main(void)
             }
             
         }
-        // Change everything around
         strcpy(line_before, input_line);
         printf("\n");
         
     }
-    // there's a potential bug where it will struggle with the very last line.
     fclose(input_file_ptr_1);
     fclose(input_file_ptr_2);
 

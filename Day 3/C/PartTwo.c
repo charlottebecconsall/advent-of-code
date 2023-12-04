@@ -46,7 +46,7 @@ Checks if there's a valid gear ratio
 Returns: gear ratio if it is valid, 0 if part number not valid
 */
 int get_gear_ratio(int asterisk_index, char *input_line, char *line_before, char *line_after)
- {
+{
     int gear_ratio = 1;
     int counter = 0;
     char *lines[3] = {line_before, input_line, line_after};
@@ -69,7 +69,7 @@ int get_gear_ratio(int asterisk_index, char *input_line, char *line_before, char
     }
     
     return gear_ratio;
- }
+}
 
 
 int main(void)

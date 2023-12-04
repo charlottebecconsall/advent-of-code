@@ -14,22 +14,6 @@ struct gear_number
     int end_index;
 };
 
-
-/*
-Checks if character is a valid symbol
-*/
-int is_symbol(char character)
-{
-    int symbol = 0;
-    if ((character < '0') || ((character > '9') && (character < 'A')) || ((character > 'Z') && (character < 'a')) || (character > 'z')) 
-    {
-        if ((character != '.') && (character != '\n')) {
-            symbol = 1;
-        }
-    }
-    return symbol;
-}
-
 /* 
 Gets full number, given an index which lies somewhere in that number
 Returns: full number found, start index of number in line provided, end index of number in line provided
